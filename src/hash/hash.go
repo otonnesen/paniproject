@@ -63,6 +63,7 @@ func base36ToDec(q byte) (int, error) {
 }
 
 // NumberFromHash converts a 6 digit string containing characters from [a-z0-9] to
+// an integer by treating it as a base 36 number and converting it to base 10.
 func NumberFromHash(hash string) (int, error) {
 	// TODO: Custom back-halfs can have lengths other than 6.
 	if len(hash) != 6 {

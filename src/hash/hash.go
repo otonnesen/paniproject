@@ -1,3 +1,4 @@
+// Package hash provides utility functions for computing URL hashes from integers and vice versa.
 package hash
 
 import (

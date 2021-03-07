@@ -1,3 +1,4 @@
+// Package api provides type definitions and decoders for API objects.
 package api
 
 import (

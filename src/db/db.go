@@ -1,3 +1,4 @@
+// Package db provides types and functions for transacting with the database.
 package db
 
 import (
@@ -10,6 +11,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// LinksEntry corresponds to a row in the links table in the database.
 type LinksEntry struct {
 	ID        int
 	LongURL   string
@@ -87,7 +89,7 @@ func InsertLink(db *sql.DB, id int, longURL string, hash string) {
 	}
 }
 
-// GetLinkById returns the row in the linsk table corresponding to the
+// GetLinkById returns the row in the links table corresponding to the
 // specified id.
 func GetLinkById(db *sql.DB, id int) LinksEntry {
 	row := db.QueryRow(fmt.Sprintf("SELECT * FROM links WHERE id = %v", id))

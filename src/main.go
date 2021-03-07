@@ -1,15 +1,20 @@
 package main
 
 import (
-	"encoding/json"
+	"database/sql"
 	"log"
 	"net/http"
 	"os"
 
-	"github.com/otonnesen/paniproject/api"
+	"github.com/otonnesen/paniproject/db"
 )
 
+var DB *sql.DB
+
 func main() {
+
+	DB = db.GetDatabase("./links.db")
+
 	port := os.Getenv("PORT")
 
 	if port == "" {
@@ -20,26 +25,4 @@ func main() {
 	http.HandleFunc("/v1/shorten", shortenHandler)
 
 	http.ListenAndServe(":"+port, nil)
-}
-
-func shortenHandler(w http.ResponseWriter, req *http.Request) {
-	data, err := api.NewShortenRequest(req)
-	data = data
-	if err != nil {
-		log.Printf("Bad shorten request: %v\n", err)
-	}
-
-	// shortenResp := logic(data)
-	shortenResp := ""
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(shortenResp)
-}
-
-func getShortURL(url string) string {
-	// Ask db what number I am
-	// Generate hash (do this in stored procedure?)
-	// append hash to domain (localhost)
-	// Insert hash into database (unless I already did this in step 2)
-	return ""
 }

@@ -8,6 +8,4 @@ COPY ./src/ ./
 
 RUN go build
 
-# EXPOSE 3000
-
 CMD ["./db_server"]

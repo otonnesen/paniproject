@@ -14,7 +14,7 @@ import (
 // LinksEntry corresponds to a row in the links table in the database.
 type LinksEntry struct {
 	ID        int
-	LongURL   string
+	URL       string
 	CreatedAt time.Time
 }
 
@@ -41,7 +41,7 @@ func GetDatabase(path string) *sql.DB {
 func InitDatabase(db *sql.DB) {
 	createLinksTableSQL := `CREATE TABLE IF NOT EXISTS links (
 		"id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-		"long_url" TEXT,
+		"url" TEXT,
 		"created_at" TEXT
 	);`
 
@@ -54,14 +54,14 @@ func InitDatabase(db *sql.DB) {
 
 // GetNextId inserts a new row into the links and returns the value assigned
 // to its id column.
-func GetNextId(db *sql.DB, longURL string) int {
-	getNextIdSQL := `INSERT INTO links (long_url, created_at) VALUES (?, ?);`
+func GetNextId(db *sql.DB, url string) int {
+	getNextIdSQL := `INSERT INTO links (url, created_at) VALUES (?, ?);`
 
 	statement, err := db.Prepare(getNextIdSQL)
 	if err != nil {
 		log.Printf("Error inserting into links table: %v\n", err)
 	}
-	r, err := statement.Exec(longURL, time.Now().Format(time.RFC3339))
+	r, err := statement.Exec(url, time.Now().Format(time.RFC3339))
 	if err != nil {
 		log.Printf("Error executing statement: %v\n", err)
 	}
@@ -80,7 +80,7 @@ func GetLinkById(db *sql.DB, id int) (LinksEntry, error) {
 
 	var e LinksEntry
 	var t string
-	err := row.Scan(&e.ID, &e.LongURL, &t)
+	err := row.Scan(&e.ID, &e.URL, &t)
 	if err != nil {
 		return e, err
 	}

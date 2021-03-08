@@ -29,7 +29,7 @@ func main() {
 	// into the links table.
 	//	Request:
 	//		{
-	//		  "long_url": "string"
+	//		  "url": "string"
 	//		}
 	//	Response:
 	//		{
@@ -40,7 +40,7 @@ func main() {
 	// '/v1/link/{id}'.
 	//	Response:
 	//		{
-	//		  "long_url": "string"
+	//		  "url": "string"
 	//		}
 	http.HandleFunc("/v1/link/", linkIdHandler)
 

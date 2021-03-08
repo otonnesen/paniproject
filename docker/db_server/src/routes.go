@@ -13,14 +13,14 @@ import (
 func linkHandler(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "POST" {
 		d := struct {
-			LongURL string `json:"long_url"`
+			URL string `json:"url"`
 		}{}
 		err := json.NewDecoder(req.Body).Decode(&d)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		id := db.GetNextId(DB, d.LongURL)
+		id := db.GetNextId(DB, d.URL)
 
 		log.Printf("Database entry created for id %v\n", id)
 		s := struct {
@@ -50,9 +50,9 @@ func linkIdHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	s := struct {
-		LongURL string `json:"long_url"`
+		URL string `json:"url"`
 	}{
-		LongURL: link.LongURL,
+		URL: link.URL,
 	}
 
 	w.Header().Set("Content-Type", "application/json")

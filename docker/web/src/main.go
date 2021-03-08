@@ -18,7 +18,7 @@ func main() {
 	// POST: Shortens a URL.
 	//	Request:
 	//		{
-	//		  "long_url": "string"
+	//		  "url": "string"
 	//		}
 	//	Response:
 	//		{
@@ -29,7 +29,7 @@ func main() {
 	// `/v1/hash/{hash}`.
 	//	Response:
 	//		{
-	//		  "long_url": "string"
+	//		  "url": "string"
 	//		}
 	http.HandleFunc("/v1/hash/", hashHandler)
 

@@ -1,3 +1,5 @@
+// The web module implements the main hashing logic for the URL shortener, as
+// well as the microservice's external API.
 package main
 
 import (

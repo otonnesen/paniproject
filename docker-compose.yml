@@ -7,6 +7,10 @@ services:
                 build: ./docker/db_server
                 ports:
                         - "3000"
+        redirector:
+                build: ./docker/redirector
+                ports:
+                        - "5001:5001"
         nginx:
                 image: nginx:latest
                 volumes:

@@ -1,13 +1,17 @@
 services:
-        web:
-                build: .
+        hash_worker:
+                build: ./docker/hash_worker
                 ports:
                         - "5000"
+        db:
+                build: ./docker/db_server
+                ports:
+                        - "3000:3000"
         nginx:
                 image: nginx:latest
                 volumes:
                         - ./nginx.conf:/etc/nginx/nginx.conf:ro
                 depends_on:
-                        - web
+                        - hash_worker
                 ports:
                         - "5000:5000"

@@ -27,8 +27,8 @@ func redirectHandler(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 		url := respData.URL
-		if !(strings.HasPrefix(respData.URL, "http://") ||
-			strings.HasPrefix(respData.URL, "https://")) {
+		if !(strings.HasPrefix(url, "http://") ||
+			strings.HasPrefix(url, "https://")) {
 			url = "http://" + url
 		}
 		http.Redirect(w, req, url, http.StatusMovedPermanently)

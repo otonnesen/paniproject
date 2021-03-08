@@ -26,7 +26,11 @@ func shortenHandler(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		resp, err := http.Post("http://db:3000/v1/link", "application/json", bytes.NewBuffer(jsonData))
+		resp, err := http.Post(
+			"http://db:3000/v1/link",
+			"application/json",
+			bytes.NewBuffer(jsonData),
+		)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return

@@ -6,9 +6,9 @@ import (
 	"math"
 )
 
-// HashFromNumber converts an integer into a 6 digit string using characters
+// Hash converts an integer into a 6 digit string using characters
 // from [a-z0-9].
-func HashFromNumber(id int) (string, error) {
+func Hash(id int) (string, error) {
 	// Our hashes all have length 6, so the corresponding ID can't be larger than 36^6
 	if id < 0 || id > int(math.Pow(36, 6)) {
 		return "", errors.New("Hash calculation failed, ID is out of range [0, 36^6]")
@@ -62,9 +62,9 @@ func base36ToDec(q byte) (int, error) {
 	}
 }
 
-// NumberFromHash converts a 6 digit string containing characters from [a-z0-9] to
+// Unhash converts a 6 digit string containing characters from [a-z0-9] to
 // an integer by treating it as a base 36 number and converting it to base 10.
-func NumberFromHash(hash string) (int, error) {
+func Unhash(hash string) (int, error) {
 	// TODO: Custom back-halfs can have lengths other than 6.
 	if len(hash) != 6 {
 		return 0, errors.New("ID calculation failed, hash has the wrong length")

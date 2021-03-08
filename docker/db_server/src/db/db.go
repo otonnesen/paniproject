@@ -15,7 +15,6 @@ import (
 type LinksEntry struct {
 	ID        int
 	LongURL   string
-	Hash      string
 	CreatedAt time.Time
 }
 
@@ -43,7 +42,6 @@ func InitDatabase(db *sql.DB) {
 	createLinksTableSQL := `CREATE TABLE IF NOT EXISTS links (
 		"id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 		"long_url" TEXT,
-		"hash" TEXT UNIQUE,
 		"created_at" TEXT
 	);`
 
@@ -54,16 +52,16 @@ func InitDatabase(db *sql.DB) {
 	statement.Exec()
 }
 
-// GetNextId inserts a new row into the links table (to be filled with a hash
-// at a later time) and returns the value assigned to its id column.
-func GetNextId(db *sql.DB) int {
-	getNextIdSQL := `INSERT INTO links (created_at) VALUES (?);`
+// GetNextId inserts a new row into the links and returns the value assigned
+// to its id column.
+func GetNextId(db *sql.DB, longURL string) int {
+	getNextIdSQL := `INSERT INTO links (long_url, created_at) VALUES (?, ?);`
 
 	statement, err := db.Prepare(getNextIdSQL)
 	if err != nil {
 		log.Printf("Error inserting into links table: %v\n", err)
 	}
-	r, err := statement.Exec(time.Now().Format(time.RFC3339))
+	r, err := statement.Exec(longURL, time.Now().Format(time.RFC3339))
 	if err != nil {
 		log.Printf("Error executing statement: %v\n", err)
 	}
@@ -75,29 +73,20 @@ func GetNextId(db *sql.DB) int {
 	return int(id)
 }
 
-// InsertLink completes a half-filled row in the links table by assigning
-// values to its long_url and hash columns.
-func InsertLink(db *sql.DB, id int, longURL string, hash string) {
-	insertLinkSQL := `UPDATE links SET long_url = ?, hash = ? WHERE id = ?`
-	statement, err := db.Prepare(insertLinkSQL)
-	if err != nil {
-		log.Printf("Error updating links table: %v\n", err)
-	}
-	_, err = statement.Exec(longURL, hash, id)
-	if err != nil {
-		log.Printf("Error executing statement: %v\n", err)
-	}
-}
-
 // GetLinkById returns the row in the links table corresponding to the
 // specified id.
-func GetLinkById(db *sql.DB, id int) LinksEntry {
+func GetLinkById(db *sql.DB, id int) (LinksEntry, error) {
 	row := db.QueryRow(fmt.Sprintf("SELECT * FROM links WHERE id = %v", id))
 
 	var e LinksEntry
-	err := row.Scan(&e.ID, &e.LongURL, &e.Hash, &e.CreatedAt)
+	var t string
+	err := row.Scan(&e.ID, &e.LongURL, &t)
 	if err != nil {
-		log.Printf("Error querying links: %v\n", err)
+		return e, err
 	}
-	return e
+	e.CreatedAt, err = time.Parse(time.RFC3339, t)
+	if err != nil {
+		return e, err
+	}
+	return e, nil
 }

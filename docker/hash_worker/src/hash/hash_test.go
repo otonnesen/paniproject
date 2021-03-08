@@ -2,7 +2,7 @@ package hash
 
 import "testing"
 
-func TestHashFromNumber(t *testing.T) {
+func TestHash(t *testing.T) {
 	tests := []struct {
 		id       int
 		expected string
@@ -70,13 +70,13 @@ func TestHashFromNumber(t *testing.T) {
 	}
 
 	for _, i := range tests {
-		if actual, _ := HashFromNumber(i.id); actual != i.expected {
+		if actual, _ := Hash(i.id); actual != i.expected {
 			t.Errorf("Incorrect hash for id %v. Expected '%v', got '%v'.", i.id, i.expected, actual)
 		}
 	}
 }
 
-func TestNumberFromHash(t *testing.T) {
+func TestUnhash(t *testing.T) {
 	tests := []struct {
 		hash     string
 		expected int
@@ -144,7 +144,7 @@ func TestNumberFromHash(t *testing.T) {
 	}
 
 	for _, i := range tests {
-		if actual, _ := NumberFromHash(i.hash); actual != i.expected {
+		if actual, _ := Unhash(i.hash); actual != i.expected {
 			t.Errorf("Incorrect id for hash '%v'. Expected %v, got %v.", i.hash, i.expected, actual)
 		}
 	}
